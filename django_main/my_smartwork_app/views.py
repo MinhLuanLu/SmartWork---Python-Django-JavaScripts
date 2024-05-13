@@ -26,8 +26,12 @@ def register_api(request):
     elif request.method == "POST":
         serializer = EmployeeSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Register successful"}, status=status.HTTP_201_CREATED)
+            email = request.data.get('Email')
+            if Employee.objects.filter(Email=email).exists(): # Check the Emain is already in Database
+                return Response({'message': "Email is already registered"}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                serializer.save()
+                return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])

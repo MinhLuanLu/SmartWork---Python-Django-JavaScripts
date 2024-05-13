@@ -60,22 +60,28 @@
             },
             body: JSON.stringify(data),
         })
+        
         .then(response => {
-                if (response.ok) {
-                    return response.json(); 
-                } else {
-                    alert('Register failed, Try again...')
-                    throw new Error("Register failed");
-                }
-            })
-            .then(data => {
-                alert(data.message); 
-                window.location.href = 'login.html';
-                
-            })
-            .catch(error => {
-                console.error(error); 
-            });
+            console.log('Response status:', response.status);
+            if (response.ok) {
+                return response.json().then(data => {
+                    alert(data.message)
+                    window.location.href = 'login.html';
+                })
+            }
+            if (response.status === 400) {
+                return response.json().then(data => {
+                    alert(data.message); // Alert the error message from backend
+                });
+            }
+            alert('Register failed, Try again...')
+            throw new Error("Register failed");
+        })
+        .catch(error => {
+            console.error(error); 
+        });
+        
+        
         }
         
 
