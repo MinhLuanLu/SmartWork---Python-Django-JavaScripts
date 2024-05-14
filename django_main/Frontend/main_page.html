@@ -13,6 +13,7 @@
 
     <div id="location">
         <p id="text">Your current location:</p>
+        <p>FullName: <span id="FullName"></span></p>
         <p>Latitude: <span id="latitude"></span></p>
         <p>Longitude: <span id="longitude"></span></p>
         <p>CheckIn Time: <span id="checkIn_time"></span> </p>
@@ -28,6 +29,7 @@
         async
 ></script>
 <script>
+    
     let map;
 
     async function initMap() {
@@ -40,5 +42,7 @@
     }
 
     initMap();
+    
+
 </script>
 </html>

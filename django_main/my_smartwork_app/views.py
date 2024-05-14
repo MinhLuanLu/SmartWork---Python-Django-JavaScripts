@@ -47,5 +47,5 @@ def login(request):
         if not check_password(Password, user.Password):
             raise AuthenticationFailed('Incorrect password!')
         
-        
-        return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+        #Get the FullName in Employee
+        return Response({"message": "Login successful", "FullName": user.FullName}, status=status.HTTP_200_OK)

@@ -1,3 +1,10 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Retrieve FullName from sessionStorage
+    
+    let fullname = sessionStorage.getItem('fullName');
+    document.getElementById('FullName').textContent = fullname;
+});
+
 
 document.getElementById('checkin').addEventListener('click', function(){
 
@@ -21,7 +28,13 @@ document.getElementById('checkin').addEventListener('click', function(){
     minutes = datetime.getMinutes();
     seconds = datetime.getSeconds();
     checkIn_time = `${hours}:${minutes}:${seconds}   ${date}/${month}/${year}`;
+
     document.getElementById('checkIn_time').textContent = checkIn_time;
+    
+
+    
+
+    
 
     // Display map
     var mapOptions = {
