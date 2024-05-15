@@ -35,12 +35,15 @@ body {
 }
 .order-btn {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #077b2a;
     color: #fff;
     border: none;
     cursor: pointer;
     outline: none;
     border-radius: 5px;
+}
+.order-btn:hover{
+    opacity: 0.8;
 }
 .quantity-input {
     width: 50px;

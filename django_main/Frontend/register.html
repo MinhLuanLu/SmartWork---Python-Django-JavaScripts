@@ -22,10 +22,15 @@
             <input type="text" name="Postcode" placeholder="Postcode">
             <input id="Password" type="password" name="Password" placeholder="Password">
             <input id="Confirm_Password" type="password" name="Confirm Password" placeholder="Confirm Password">
-            <label>
-                <input type="checkbox" name="Policy_agreement" value="True">
-                <p>I agree to the terms and conditions</p>
-            </label>
+            <label for="Role">Choose your role</label>
+            <select name="Role" id="Role">
+                <option value="blank">Select Role</option>
+                <option value="Employee">Employee</option>
+                <option value="Manager">Manager</option>
+                <option value="Other">Other <br></option>
+            </select>
+            <p>I agree to the terms and conditions</p>
+            <input id="checkbox" type="checkbox" name="Policy_agreement" value="True">
             <input type="submit" value="Sign Up"> 
         </form>
         

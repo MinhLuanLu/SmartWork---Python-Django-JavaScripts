@@ -5,6 +5,20 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('FullName').textContent = fullname;
 });
 
+function get_location(lat,long){
+    const location_api = `https://api.bigdatacloud.net/data/reverse-geocode-client?${lat}&${long}&localityLanguage=en`
+    fetch(location_api)
+    .then(res => res.json())
+    .then(data => {
+        if (data.principalSubdivision){
+            console.log(data.principalSubdivision);
+            document.getElementById('location').textContent = data.principalSubdivision;
+        }
+        
+    
+    })
+}
+
 
 document.getElementById('checkin').addEventListener('click', function(){
 
@@ -18,7 +32,8 @@ document.getElementById('checkin').addEventListener('click', function(){
     // Display latitude and longitude
     document.getElementById("latitude").textContent = latitude;
     document.getElementById("longitude").textContent = longitude;
-
+    
+    
     //Display datetime
     const datetime = new Date();
     date = datetime.getDate();
@@ -30,12 +45,8 @@ document.getElementById('checkin').addEventListener('click', function(){
     checkIn_time = `${hours}:${minutes}:${seconds}   ${date}/${month}/${year}`;
 
     document.getElementById('checkIn_time').textContent = checkIn_time;
+    get_location(latitude,longitude);
     
-
-    
-
-    
-
     // Display map
     var mapOptions = {
         center: { lat: latitude, lng: longitude },
@@ -55,4 +66,5 @@ document.getElementById('checkin').addEventListener('click', function(){
         }
     });
         
+  
 

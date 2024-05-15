@@ -11,6 +11,7 @@ class Employee(models.Model):
     Postcode = models.CharField(max_length=8)
     Password = models.CharField(max_length=50)
     Policy_agreement = models.BooleanField()
+    Role = models.CharField(max_length=50, default='Employee')
 
     def __str__(self):
         return self.FullName

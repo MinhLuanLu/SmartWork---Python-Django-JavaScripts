@@ -27,10 +27,16 @@ input[type="submit"] {
     border-radius: 5px;
 }
 input[type="submit"] {
-    background-color: #007bff;
+    background-color: #077b2a;
     color: #fff;
     cursor: pointer;
+    margin-left: 10px;
 }
 input[type="submit"]:hover {
     background-color: #0056b3;
+}
+
+#register_link{
+    text-decoration-line: none;
+    margin-left: 38%;
 }

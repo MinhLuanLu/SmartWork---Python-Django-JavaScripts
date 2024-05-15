@@ -12,8 +12,9 @@ const form = document.getElementById('login_form');
         const data = Object.fromEntries(formData);
         console.log(data);
      
+        const fetch_url = "http://127.0.0.1:8000/login/";
 
-        fetch("http://127.0.0.1:8000/login/",{
+        fetch(fetch_url,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'  
@@ -33,11 +34,9 @@ const form = document.getElementById('login_form');
             .then(data => {
                 
                 alert(data.message); 
-                window.location.href = 'main_page.html';                
+                window.location.href = 'checkIn.html';                
                 
                 if (data.FullName){
-                    
-                    alert('Wellcome ' + data.FullName);
                     sessionStorage.setItem('fullName', data.FullName);//store the FullName in the sessionStorage     
                 }
                 

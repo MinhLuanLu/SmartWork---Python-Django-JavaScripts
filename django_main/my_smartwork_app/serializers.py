@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import make_password
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ["id", "FullName", "Email", "Address", "City", "Postcode", "Password", "Policy_agreement"]
+        fields = ["id", "FullName", "Email", "Address", "City", "Postcode", "Password","Role", "Policy_agreement"]
 
     def create(self, validated_data):
         Password = validated_data.pop('Password', None)
