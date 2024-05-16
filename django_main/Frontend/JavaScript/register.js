@@ -6,6 +6,7 @@ const form = document.getElementById('register_form');
 
         formData.delete('Confirm Password');
         
+       
         // Create JSON format
         const data = Object.fromEntries(formData);
         console.log(data);
@@ -55,14 +56,20 @@ const form = document.getElementById('register_form');
                     }
                 })
             }
+            
             if (response.status === 400) {
                 return await response.json().then(data => {
-                    alert(data.message); // Alert the error message from backend
+                    if (data.message){
+                        alert(data.message);
+                    }// Alert the error message from backend
+                    
                 });
             }
             alert('Register failed, Try again...')
             throw new Error("Register failed");
+            
         })
+        
         .catch(error => {
             console.error(error); 
         });

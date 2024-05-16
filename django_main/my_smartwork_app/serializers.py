@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from .models import Employee
+from .models import User
 from django.contrib.auth.hashers import make_password
 
 
-class EmployeeSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Employee
+        model = User
         fields = ["id", "FullName", "Email", "Address", "City", "Postcode", "Password","Role", "Policy_agreement"]
 
     def create(self, validated_data):
