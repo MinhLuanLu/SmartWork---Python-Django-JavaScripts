@@ -3,47 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="JavaScript/checkIn.js" defer></script>
     <link rel="stylesheet" href="css/checkIn.css">
+    <script src="JavaScript/checkIn.js" defer></script>
     <title>CheckIn</title>
     
 </head>
 <body>
-    <h1>Welcome to the main page</h1>
+    <div id="container">
+        <h1>CheckIn Your current location</h1>
 
-    <div id="location">
-        <p id="text">Your current location:</p>
-        <p>FullName: <span id="FullName"></span></p>
-        <p>Latitude: <span id="latitude"></span></p>
-        <p>Longitude: <span id="longitude"></span></p>
-        <p>Your Location: <span id="location"></span> </p>
-        <p>CheckIn Time: <span id="checkIn_time"></span> </p>
+        <div id="location">
+            <p>FullName: <span id="FullName"></span></p>
+            <p>Latitude: <span id="latitude"></span></p>
+            <p>Longitude: <span id="longitude"></span></p>
+            <p>Your Location: <span id="your_location"></span> </p>
+            <p>CheckIn Time: <span id="checkIn_time"></span> </p>
+        </div>
+        <button id="checkin">Check In</button>
+        <div class="notification" id="notification">
+            CheckIn is successfully!!
+        </div>
+
+        <div id="map"></div>
     </div>
-    <button id="checkin">Check In</button>
 
-    <div id="map" style="width: 400px; height: 300px;"></div>
-
-    
-</body>
-<script async defer
+    <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5Q6QrathyiXUBkdcOaumXFiWf5gpXqGc&callback=initMap"
         async
 ></script>
-<script>
-    
-    let map;
+    <script>
+        let map;
 
-    async function initMap() {
-    const { Map } = await google.maps.importLibrary("maps");
+        async function initMap() {
+            const { Map } = await google.maps.importLibrary("maps");
 
-    map = new Map(document.getElementById("map"), {
-        center: { lat: 56.2639, lng: 9.5018 },
-        zoom: 5,
-    });
-    }
+            map = new Map(document.getElementById("map"), {
+                center: { lat: 56.2639, lng: 9.5018 },
+                zoom: 5,
+            });
+        }
 
-    initMap();
-    
-
-</script>
+        initMap();
+    </script>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('checkin').innerText = `Check In (${timeString})`;
+        }
+        
+        updateTime();
+        setInterval(updateTime, 1000); // Update time every second
+    </script>
+</body>
 </html>
