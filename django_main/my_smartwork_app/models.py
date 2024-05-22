@@ -64,4 +64,12 @@ class Assignment(models.Model):
         else:
             info = f'{self.Titlle}: {self.Created_at} [ Status: Cancelled ]'
 
-    
+class CheckIn(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    Location = models.CharField(max_length=100)
+    Latitude = models.CharField(max_length=50)
+    Longitude = models.CharField(max_length=50)
+    CheckIn_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.employee.user.FullName} - CheckIn at [ {str(self.CheckIn_time)} - {self.Location}]"

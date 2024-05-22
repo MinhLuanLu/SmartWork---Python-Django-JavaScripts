@@ -10,7 +10,7 @@ const form = document.getElementById('login_form');
         
         // Create JSON format
         const data = Object.fromEntries(formData);
-        console.log(data);
+      
      
         const fetch_url = "http://127.0.0.1:8000/login/";
 
@@ -34,10 +34,14 @@ const form = document.getElementById('login_form');
             .then(data => {
                 
                 alert(data.message); 
-                window.location.href = 'checkIn.html';                
+                window.location.href = 'main_page.html';                
                 
                 if (data.FullName){
-                    sessionStorage.setItem('fullName', data.FullName);//store the FullName in the sessionStorage     
+                    sessionStorage.setItem('FullName', data.FullName);//store the FullName in the sessionStorage     
+                    
+                    sessionStorage.setItem('useremail', data.useremail);
+                    sessionStorage.setItem('useraddress', data.useraddress);
+                    sessionStorage.setItem('userrole', data.userrole);
                 }
                 
             })

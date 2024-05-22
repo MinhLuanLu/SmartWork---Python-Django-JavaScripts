@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main_page.css">
+    <script src="JavaScript/main_page.js" defer></script>
+   
+    <title>CheckIn Live Button</title>
+
+</head>
+<body>
+    <header>
+        <h1>Welcome to SmartWork</h1>
+    </header>
+    <nav>
+        <a href="profile.html">Profile</a>
+        <a href="product.html">Order</a>
+        <a href="#chat">Chat</a>
+        <a href="checkIn.html">Check-in</a>
+        <a type="button" id="logout" href="home.html">Logout</a>
+    </nav>
+    <div id="fullname"></div>
+    <div class="button-container">
+        <button type="button" class="checkin_button" id="checkin_button">
+            <div class="location" id="location_div" style="display: none;">Current Location: <span id="location"></span></div>
+            <div class="checkin_time" id="checkin_time_div" style="display: none;">Check-in Time: <span id="checkin_time"></span></div>
+            <p id="checkIn_text" style="display: block;">Check-In</p>
+            <div class="live_time" id="liveTime"></div>
+        </button>
+    </div>
+</body>
+</html>

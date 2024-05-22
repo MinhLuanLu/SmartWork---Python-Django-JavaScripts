@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('my_smartwork_app.urls') ),
     path('register_api/', include('my_smartwork_app.urls')),
-    path('login/', include('my_smartwork_app.urls'))
+    path('login/', include('my_smartwork_app.urls')),
+    path('CheckIn_api/',  include('my_smartwork_app.urls'))
 ]
