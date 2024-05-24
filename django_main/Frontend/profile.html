@@ -11,14 +11,14 @@
     <div class="navbar">
         <a href="main_page.html">Home</a>
         <a href="product.html">Order</a>
-        <a href="">Chat</a>
+        <a href="#">Chat</a>
         <a href="checkIn.html">Check-In</a>
         <a id="logout" type="button" href="home.html">Logout</a>
     </div>
 
     <div class="container">
         <div class="user-info">
-            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="User Avatar" width="100" height="100">
+            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="User Avatar" class="avatar">
             <div class="user-details">
                 <h2>User Information</h2>
                 <p><strong>Name:</strong> <span id="name"></span></p>
@@ -32,127 +32,124 @@
         <div class="search-bar">
             <input type="text" id="search" placeholder="Search for your workplace...">
             <button>Search</button>
-            <div class="result">Result: </div>
         </div>
+        <div class="result">Result: </div>
 
-        <div>
+        <div class="checkin-history">
+            <h2>Check-In History</h2>
             <table>
-                <tr>
-                  <th>CheckIn History</th>
-                  
-                </tr>
-                <tr>
-                  <td id="checkin_history"></td>
-                </tr>
-                
-              </table>
+                <thead>
+                    <tr>
+                        <th>Location</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>CheckIn-Time</th>
+                    </tr>
+                    <tr>
+                        <td id="location"></td>
+                        <td id="latitude"></td>
+                        <td id="longitude"></td>
+                        <td id="checkIn_time"></td>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
 
-</body>
 <script>
-    function get_user_info(){
+    document.addEventListener('DOMContentLoaded', function () {
+        get_user_info();
+        get_CheckIn_info();
+
+        document.getElementById('logout').addEventListener('click', function () {
+            sessionStorage.clear();
+        });
+    });
+
+    function get_user_info() {
         const get_email = sessionStorage.getItem('Email');
-        object_get_email = {'Email': get_email};
+        const object_get_email = { 'Email': get_email };
 
-        fetch('http://127.0.0.1:8000/User_info_api/',{
-
+        fetch('http://127.0.0.1:8000/User_info_api/', {
             method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'  
-                },
-                body: JSON.stringify(object_get_email) 
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(object_get_email)
         })
         .then(response => {
-            if (response.ok) {
-                return response.json(); 
+            if(response.ok){
+                return response.json();
             }
         })
         .then(data => {
-            
-            if (data.message){
-                console.log(data.message );
-                info = data.user_info;
-                const info_json_convert = JSON.stringify(info)
-
-                const fullname = sessionStorage.getItem('FullName');
-                const info_json = JSON.parse(info_json_convert);
-
-                document.getElementById('name').innerText = fullname;
-                document.getElementById('email').innerText = info_json['Email'];
-                document.getElementById('address').innerText = info_json['Address'];
-                document.getElementById('postcode').innerText = info_json['Postcode'];
-                document.getElementById('role').innerText = info_json['Role'];
-                        
-            }  
-            if (data.error){
+            if (data.message) {
+                const info = data.user_info;
+                document.getElementById('name').innerText = sessionStorage.getItem('FullName');
+                document.getElementById('email').innerText = info.Email;
+                document.getElementById('address').innerText = info.Address;
+                document.getElementById('postcode').innerText = info.Postcode;
+                document.getElementById('role').innerText = info.Role;
+            }
+            if (data.error) {
                 alert(data.error);
             }
         })
-        .catch(error =>{
-            
-            alert(' Server 400, Logout and try again...')
-        })
+        .catch(() => alert('Server 400, Logout and try again...'));
     }
 
-    function get_CheckIn_info(){
-    const get_email = sessionStorage.getItem('Email');
+    function get_CheckIn_info() {
+        const get_email = sessionStorage.getItem('Email');
+        const data_object = { "Email": get_email };
 
-    const data_object ={"Email": get_email};
-
-    fetch('http://127.0.0.1:8000/CheckIn_info_api/',{
+        fetch('http://127.0.0.1:8000/CheckIn_info_api/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'  
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data_object),
         })
         .then(response => {
             if (response.ok){
-                return response.json()
+                return response.json();
             }
         })
-        .then(data =>{
-            if (data.checkin_info){
-                const checkin_info = data.checkin_info;     
+        .then(data => {
+            if (data.checkin_info) {
+                checkin_info = data.checkin_info;
+                
+                
+                json_convert = JSON.stringify(checkin_info);
+                prase_json = JSON.parse(json_convert);
+                for(let i=0; i < prase_json.length; i++){
 
-                object_length = Object.keys(checkin_info).length; // GEt the Oject length
+                    let get_items = prase_json[i];
+                    const location = get_items['Location'];
+                    const latitude = get_items['Latitude'];
+                    const longitude = get_items['Longitude'];
+                    const checkIn_time = get_items['CheckIn_time'];
 
-                for (let key in checkin_info) {
-                    if (checkin_info.hasOwnProperty(key)) {
-                        const get_object = checkin_info[key];
-                        const json_convert = JSON.stringify(get_object);
-                        console.log(json_convert);
+                    const paragraph_location = document.createElement('tr');
+                    const paragraph_latitude = document.createElement('tr');
+                    const paragraph_longitude = document.createElement('tr');
+                    const paragraph_checkIn_time = document.createElement('tr');
 
-                        // If you want to display each JSON string separately, you might want to create separate elements for each.
-                        const element = document.createElement('table');
-                        element.innerText = json_convert;
-                        document.getElementById('checkin_history').appendChild(element);
-                    }
-            }
-            }
-        })
-        .catch(error =>{
+                    paragraph_location.textContent = location;
+                    paragraph_latitude.innerText = latitude;
+                    paragraph_longitude.innerText = longitude;
+                    paragraph_checkIn_time.innerText = checkIn_time;
+
+                    document.getElementById('location').appendChild(paragraph_location);
+                    document.getElementById('latitude').appendChild(paragraph_latitude);
+                    document.getElementById('longitude').appendChild(paragraph_longitude);
+                    document.getElementById('checkIn_time').appendChild(paragraph_checkIn_time);                    
+                }
+                           
             
-            alert(' Server 400, Logout and try again...')
+            }
         })
-}
-
-    
-    
-    ////Run Functions
-    get_user_info();
-    get_CheckIn_info();
-    
-    
-    
-
-    
-
-    document.getElementById('logout').addEventListener('click',function() {
-       sessionStorage.clear()
-    })
-
-    
+        .catch(() => alert('Server 400, Logout and try again...'));
+    }
 </script>
+</body>
 </html>

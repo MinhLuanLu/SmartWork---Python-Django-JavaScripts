@@ -11,6 +11,13 @@
     
 </head>
 <body>
+    <div class="navbar"> 
+        <a href="main_page.html">Home</a>
+        <a href="product.html">Order</a>
+        <a href="#">Chat</a>
+        <a href="checkIn.html">Check-In</a>
+        <a id="logout" type="button" href="home.html">Logout</a>
+    </div>
     <div id="container">
         <h1>CheckIn Your current location</h1>
        
@@ -68,6 +75,10 @@
         
         updateTime();
         setInterval(updateTime, 1000); // Update time every second
+
+        document.getElementById('logout').addEventListener('click', function(){
+            sessionStorage.clear();
+        })
     </script>
 </body>
 </html>

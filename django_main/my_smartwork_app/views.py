@@ -107,7 +107,7 @@ def CheckIn_info_api(request):
         if employee_check_info is None:
             return Response({"message": "data not vailid"}, status=status.HTTP_400_BAD_REQUEST)
          
-        
+        get = employee_check_infoSerializer.data
 
         
-        return Response({"message": "Did Get Data", "checkin_info": employee_check_infoSerializer.data},status=status.HTTP_200_OK)
+        return Response({"message": "Did Get Data", "checkin_info": get}, status=status.HTTP_200_OK)
