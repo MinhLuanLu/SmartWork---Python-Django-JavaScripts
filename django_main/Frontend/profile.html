@@ -11,8 +11,9 @@
     <div class="navbar">
         <a href="main_page.html">Home</a>
         <a href="product.html">Order</a>
+        <a href="">Chat</a>
         <a href="checkIn.html">Check-In</a>
-        <a href="home.html">Logout</a>
+        <a id="logout" type="button" href="home.html">Logout</a>
     </div>
 
     <div class="container">
@@ -20,9 +21,10 @@
             <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="User Avatar" width="100" height="100">
             <div class="user-details">
                 <h2>User Information</h2>
-                <p><strong>Name:</strong> <span id="fullname"></span></p>
+                <p><strong>Name:</strong> <span id="name"></span></p>
                 <p><strong>Email:</strong> <span id="email"></span></p>
                 <p><strong>Address:</strong> <span id="address"></span></p>
+                <p><strong>Postcode:</strong> <span id="postcode"></span></p>
                 <p><strong>Role:</strong> <span id="role"></span></p>
             </div>
         </div>
@@ -34,37 +36,123 @@
         </div>
 
         <div>
-            <h2>Check-In Table</h2>
-            <table class="checkin-table">
+            <table>
                 <tr>
-                    <th>Date</th>
-                    <th>Time In</th>
-                    <th>Time Out</th>
+                  <th>CheckIn History</th>
+                  
                 </tr>
                 <tr>
-                    <td>2024-05-20</td>
-                    <td>08:00 AM</td>
-                    <td>04:00 PM</td>
+                  <td id="checkin_history"></td>
                 </tr>
-                <tr>
-                    <td>2024-05-21</td>
-                    <td>08:15 AM</td>
-                    <td>04:15 PM</td>
-                </tr>
-                <!-- Additional rows can be added here -->
-            </table>
+                
+              </table>
         </div>
     </div>
 
 </body>
 <script>
-    const get_fullname = sessionStorage.getItem('FullName');
-    const get_email = sessionStorage.getItem('useremail');
-    const get_useraddress = sessionStorage.getItem('useraddress');
-    const get_userrole = sessionStorage.getItem('userrole');
-    document.getElementById('fullname').innerText = get_fullname;
-    document.getElementById('email').innerText = get_email;
-    document.getElementById('address').innerText = get_useraddress;
-    document.getElementById('role').innerText = get_userrole;
+    function get_user_info(){
+        const get_email = sessionStorage.getItem('Email');
+        object_get_email = {'Email': get_email};
+
+        fetch('http://127.0.0.1:8000/User_info_api/',{
+
+            method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  
+                },
+                body: JSON.stringify(object_get_email) 
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json(); 
+            }
+        })
+        .then(data => {
+            
+            if (data.message){
+                console.log(data.message );
+                info = data.user_info;
+                const info_json_convert = JSON.stringify(info)
+
+                const fullname = sessionStorage.getItem('FullName');
+                const info_json = JSON.parse(info_json_convert);
+
+                document.getElementById('name').innerText = fullname;
+                document.getElementById('email').innerText = info_json['Email'];
+                document.getElementById('address').innerText = info_json['Address'];
+                document.getElementById('postcode').innerText = info_json['Postcode'];
+                document.getElementById('role').innerText = info_json['Role'];
+                        
+            }  
+            if (data.error){
+                alert(data.error);
+            }
+        })
+        .catch(error =>{
+            
+            alert(' Server 400, Logout and try again...')
+        })
+    }
+
+    function get_CheckIn_info(){
+    const get_email = sessionStorage.getItem('Email');
+
+    const data_object ={"Email": get_email};
+
+    fetch('http://127.0.0.1:8000/CheckIn_info_api/',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  
+            },
+            body: JSON.stringify(data_object),
+        })
+        .then(response => {
+            if (response.ok){
+                return response.json()
+            }
+        })
+        .then(data =>{
+            if (data.checkin_info){
+                const checkin_info = data.checkin_info;     
+
+                object_length = Object.keys(checkin_info).length; // GEt the Oject length
+
+                for (let key in checkin_info) {
+                    if (checkin_info.hasOwnProperty(key)) {
+                        const get_object = checkin_info[key];
+                        const json_convert = JSON.stringify(get_object);
+                        console.log(json_convert);
+
+                        // If you want to display each JSON string separately, you might want to create separate elements for each.
+                        const element = document.createElement('table');
+                        element.innerText = json_convert;
+                        document.getElementById('checkin_history').appendChild(element);
+                    }
+            }
+            }
+        })
+        .catch(error =>{
+            
+            alert(' Server 400, Logout and try again...')
+        })
+}
+
+    
+    
+    ////Run Functions
+    get_user_info();
+    get_CheckIn_info();
+    
+    
+    
+
+    
+
+    document.getElementById('logout').addEventListener('click',function() {
+       sessionStorage.clear()
+    })
+
+    
 </script>
 </html>

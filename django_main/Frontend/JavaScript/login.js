@@ -37,11 +37,9 @@ const form = document.getElementById('login_form');
                 window.location.href = 'main_page.html';                
                 
                 if (data.FullName){
-                    sessionStorage.setItem('FullName', data.FullName);//store the FullName in the sessionStorage     
-                    
-                    sessionStorage.setItem('useremail', data.useremail);
-                    sessionStorage.setItem('useraddress', data.useraddress);
-                    sessionStorage.setItem('userrole', data.userrole);
+                    sessionStorage.setItem('FullName', data.FullName);//store the FullName in the sessionStorage 
+                    save_email = document.getElementById('email').value;
+                    sessionStorage.setItem('Email', save_email); //Save Email to session
                 }
                 
             })

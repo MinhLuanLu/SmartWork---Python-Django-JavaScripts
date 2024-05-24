@@ -15,6 +15,7 @@ body {
     text-align: center;
     padding: 14px 20px;
     text-decoration: none;
+    
 }
 .navbar a:hover {
     background-color: #ddd;
@@ -53,16 +54,59 @@ body {
     margin-top: 20px;
 }
 
-.checkin-table {
+
+table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-}
-.checkin-table th, .checkin-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-.checkin-table th {
-    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+    border: 2px solid #ccc;
+    margin: 10px;
+    overflow: scroll;
+    
+  }
+
+  
+  th, td {
+    border: 1px solid #ccc;
+    padding: 12px;
     text-align: left;
-}
+    
+  }
+  
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  td :hover{
+    opacity: 1.5;
+    color: black;
+    background-color: #ccc;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  tr:hover {
+    background-color: #f0f0f0;
+  }
+  
+
+  #checkin_history{
+    overflow: scroll;
+    text-align: left;
+    font-style: italic;
+    color: #555;
+    width: auto;
+    margin: 50px;
+  
+  }
+
+  #checkin_history:hover{
+    cursor: pointer;
+    opacity: 1.5;
+  }
+  
+  

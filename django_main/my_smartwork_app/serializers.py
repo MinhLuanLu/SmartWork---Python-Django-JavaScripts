@@ -22,7 +22,7 @@ class CheckInSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CheckIn
-        fields = ['FullName', 'Location', 'Latitude', 'Longitude']
+        fields = ['FullName', 'Location', 'Latitude', 'Longitude','CheckIn_time']
 
         """
         The user__username=value is used because the Employee model has a OneToOneField relationship with the User model, 
@@ -46,3 +46,14 @@ class CheckInSerializer(serializers.ModelSerializer):
         employee = Employee.objects.get(user__FullName=FullName) # Find the Employee object that matches the FullName
         check_in = CheckIn.objects.create(employee=employee, **validated_data) #create the instance to the CheckIn Model
         return check_in
+    
+class ProfileSerialize(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['Email', 'Address', 'City','Postcode', 'Role']
+
+
+class CheckIn_infoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CheckIn
+        fields = ["Location", "Latitude", "Longitude", "CheckIn_time"]

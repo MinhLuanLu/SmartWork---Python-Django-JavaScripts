@@ -12,7 +12,7 @@ function updateLiveTime() {
 }
 
 updateLiveTime();
-setInterval(updateLiveTime, 1000); 
+setInterval(updateLiveTime, 1000);
 
 const getLocation = sessionStorage.getItem('Location');
 const getcheckin_time = sessionStorage.getItem('checkin_time');
@@ -31,12 +31,15 @@ if (getLocation && getcheckin_time){
     document.getElementById('checkin_time').innerText = getcheckin_time;
 }
 
-
+/// Listen to the Checkin_button
 document.getElementById('checkin_button').addEventListener('click', function(){
     window.location.href = 'checkIn.html';
 })
 
-
+/// Listen to the logout
 document.getElementById('logout').addEventListener('click', function(){
     sessionStorage.clear();
  })
+
+
+

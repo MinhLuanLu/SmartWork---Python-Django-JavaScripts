@@ -44,6 +44,7 @@ function fetch_dataform_to_api(){
     checkInData.push(["Location", document.getElementById("your_location").innerText]);
     checkInData.push(["Latitude", document.getElementById("latitude").innerText]);
     checkInData.push(["Longitude", document.getElementById("longitude").innerText]);
+    checkInData.push(["CheckIn_time", document.getElementById("checkIn_time").innerText]);
     
     // Convert array to object
     var data_form = {};
@@ -51,7 +52,7 @@ function fetch_dataform_to_api(){
         data_form[item[0]] = item[1];
     });
     console.log("Check In Data:", data_form);
-
+    
     ///fetch the object to API
    
 
@@ -72,6 +73,7 @@ function fetch_dataform_to_api(){
                     window.location.href = 'main_page.html'; 
                     
                 }
+
             })
         }
         if(response.status === 400){
@@ -85,9 +87,12 @@ function fetch_dataform_to_api(){
     })
 
     .catch(error =>{
-        alert(error.error);
+            
+            alert(' Server 400, Logout and try again...')
     })
 }
+
+
 
 document.getElementById('checkin').addEventListener('click', event => {
     event.preventDefault();
@@ -149,9 +154,12 @@ document.getElementById('checkin').addEventListener('click', event => {
 
 
 
+
+
 document.getElementById('confirmCheckin').addEventListener('click', event=>{
     event.preventDefault();
     fetch_dataform_to_api();
+    
     /// Add more
 })
 
