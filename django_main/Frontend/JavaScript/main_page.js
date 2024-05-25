@@ -14,11 +14,18 @@ function updateLiveTime() {
 updateLiveTime();
 setInterval(updateLiveTime, 1000);
 
+let role = sessionStorage.getItem('user_role'); ///Check Users Role
+if (role == 'Manager'){
+    document.getElementById('checkin_nav').style.display = 'none';
+    document.getElementById('confirm').style.display = 'inline-block';
+    document.getElementById('button-container').style.display = 'none';
+}
+
 const getLocation = sessionStorage.getItem('Location');
 const getcheckin_time = sessionStorage.getItem('checkin_time');
 const fullname = sessionStorage.getItem('FullName');
 
-document.getElementById('fullname').innerText = fullname;
+document.getElementById('fullname').innerText = `${fullname} [${role}]`;
 
 
 

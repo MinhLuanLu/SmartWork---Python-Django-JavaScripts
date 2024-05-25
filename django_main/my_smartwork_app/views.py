@@ -59,8 +59,9 @@ def login(request):
         
         if not check_password(Password, user.Password):
             raise AuthenticationFailed('Incorrect password!')
+        
    
-        return Response({"message": "Login successful", "FullName": user.FullName}, status=status.HTTP_200_OK)
+        return Response({"message": "Login successful", "FullName": user.FullName, "user_role": user.Role}, status=status.HTTP_200_OK)
 
 @api_view(["POST", "GET"])
 def CheckIn_api(request):
@@ -123,12 +124,12 @@ def Assignment_api(request):
         email = request.data.get("Email")
         data = request.data.get("Search_data")
 
-        check_email = Assignment.objects.filter(employee__user__Email = email) 
+        check_email_employee = Assignment.objects.filter(employee__user__Email = email) 
         search_data = data.capitalize() # maake the first letter is capitalized
 
 
         
-        if  not check_email:
+        if  not check_email_employee:
             return Response({"message": " Email is not vailid"}, status=status.HTTP_400_BAD_REQUEST) #### Need to change
         try:
             check_customer_name = Assignment.objects.get(customer__CustomerName=search_data)

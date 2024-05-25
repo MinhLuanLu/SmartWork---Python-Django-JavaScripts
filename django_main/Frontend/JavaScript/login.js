@@ -40,6 +40,7 @@ const form = document.getElementById('login_form');
                     sessionStorage.setItem('FullName', data.FullName);//store the FullName in the sessionStorage 
                     save_email = document.getElementById('email').value;
                     sessionStorage.setItem('Email', save_email); //Save Email to session
+                    sessionStorage.setItem('user_role', data.user_role);
                 }
                 
             })
