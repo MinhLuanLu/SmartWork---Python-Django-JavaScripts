@@ -16,9 +16,12 @@ nav {
 }
 nav a {
     text-decoration: none;
-    color: #077b2a;
+    color: #050505;
     margin: 0 10px;
+    font-weight: bold;
 }
+
+
 #description {
     text-align: center;
 }

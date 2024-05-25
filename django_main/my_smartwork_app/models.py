@@ -24,7 +24,7 @@ class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        info = f"{self.user.FullName} [{self.Role}]"
+        info = f"{self.user.FullName}"
         return info
 
 class Manager(models.Model):
@@ -32,11 +32,11 @@ class Manager(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        info = f"{self.user.FullName} [{self.Role}]"
+        info = f"{self.user.FullName}"
         return info
     
 class Customer(models.Model):
-    Customer_Name = models.CharField(max_length=100)
+    CustomerName = models.CharField(max_length=100)
     Address = models.CharField(max_length=50)
     Country = models.CharField(max_length=50)
     City = models.CharField(max_length=50)
@@ -45,7 +45,7 @@ class Customer(models.Model):
     Created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.Customer_Name
+        return self.CustomerName
 
 
 class Assignment(models.Model):

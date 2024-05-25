@@ -4,7 +4,7 @@ body {
   padding: 0;
 }
 .navbar {
-  background-color: #333;
+  background-color: #077b2a;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -53,18 +53,66 @@ body {
   cursor: pointer;
 }
 .result {
-  font-weight: bold;
-  margin-bottom: 10px;
+  border: 2px solid #4CAF50;
+  padding: 10px;
+  margin: 20px;
+  background-color: #f9f9f9;
+  overflow-y: scroll;
+}
+.result table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.result th, .result td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+.result th {
+  background-color: #4CAF50;
+  color: white;
+}
+.result tr:nth-child(even) {
+  background-color: #f2f2f2;
+  
+}
+.result tr:hover {
+  background-color: #ddd;
+}
+
+
+.checkin-history {
+  border: 2px solid #333;
+  padding: 20px;
+  margin: 20px;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+  overflow-y: scroll;
+}
+.checkin-history h2 {
+  color: #333;
+  text-align: center;
 }
 .checkin-history table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
+  height: 10px;
 }
+
+
 .checkin-history th, .checkin-history td {
-  padding: 8px;
+  border: 1px solid #ddd;
+  padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
 }
 .checkin-history th {
+  background-color: #333;
+  color: white;
+}
+.checkin-history tr:nth-child(even) {
   background-color: #f2f2f2;
+}
+.checkin-history tr:hover {
+  background-color: #ddd;
 }

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,CheckIn,Employee
+from .models import User,CheckIn,Employee,Assignment
 from django.contrib.auth.hashers import make_password
 
 
@@ -57,3 +57,9 @@ class CheckIn_infoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckIn
         fields = ["Location", "Latitude", "Longitude", "CheckIn_time"]
+
+
+class AssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assignment
+        fields = ["customer", "contract_manager", 'employee', "Activate"]

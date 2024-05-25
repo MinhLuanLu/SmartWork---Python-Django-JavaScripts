@@ -23,5 +23,6 @@ urlpatterns = [
     path('login/', include('my_smartwork_app.urls')),
     path('CheckIn_api/',  include('my_smartwork_app.urls')),
     path('User_info_api', include('my_smartwork_app.urls')),
-    path('CheckIn_info_api/', include('my_smartwork_app.urls'))
+    path('CheckIn_info_api/', include('my_smartwork_app.urls')),
+    path('Assignment_api/',include('my_smartwork_app.urls') )
 ]

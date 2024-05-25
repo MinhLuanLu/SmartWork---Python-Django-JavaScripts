@@ -2,11 +2,14 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from .models import User, Employee, Manager,CheckIn
-from .serializers import UserSerializer, CheckInSerializer, ProfileSerialize, CheckIn_infoSerializer
+from .models import User, Employee, Manager,CheckIn,Assignment,Customer
+from .serializers import UserSerializer, CheckInSerializer, ProfileSerialize, CheckIn_infoSerializer, AssignmentSerializer
+
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
+
+
 
 
 
@@ -91,19 +94,15 @@ def User_info_api(request):
     return Response({"message": 'successful', "user_info": profileserializer.data}, status=status.HTTP_200_OK)
     
 
-@api_view(["POST", "GET"])
+@api_view(["POST"])
 def CheckIn_info_api(request):
-    if request.method == 'GET':
-        checkin_info = CheckIn.objects.all()
-        checkin_infoSerializer = CheckIn_infoSerializer(checkin_info, many=True)
-        return Response(checkin_infoSerializer.data)
     
     if request.method == 'POST':
         get_email = request.data.get('Email')
         
         employee_check_info = CheckIn.objects.filter(employee__user__Email = get_email) # Get the Email in User Model by using __
         employee_check_infoSerializer = CheckIn_infoSerializer(employee_check_info, many=True) # Make the data to Serializer fields
-
+    
         if employee_check_info is None:
             return Response({"message": "data not vailid"}, status=status.HTTP_400_BAD_REQUEST)
          
@@ -111,3 +110,65 @@ def CheckIn_info_api(request):
 
         
         return Response({"message": "Did Get Data", "checkin_info": get}, status=status.HTTP_200_OK)
+    
+
+@api_view(['GET', 'POST'])
+def Assignment_api(request):
+    if request.method == "GET":
+        assignment = Assignment.objects.all()
+        assignmentSerializer = AssignmentSerializer(assignment, many=True)
+        return Response(assignmentSerializer.data)
+    
+    if request.method == "POST":
+        email = request.data.get("Email")
+        data = request.data.get("Search_data")
+
+        check_email = Assignment.objects.filter(employee__user__Email = email) 
+        search_data = data.capitalize() # maake the first letter is capitalized
+
+
+        
+        if  not check_email:
+            return Response({"message": " Email is not vailid"}, status=status.HTTP_400_BAD_REQUEST) #### Need to change
+        try:
+            check_customer_name = Assignment.objects.get(customer__CustomerName=search_data)
+        except Assignment.DoesNotExist:
+            return Response({"message": "Search data is not valid"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        ## send error massage to frontend if check email and check data search not exist
+        print(f"{email}: Searching for: {search_data}")
+        
+        assignmentSerializer = AssignmentSerializer(check_customer_name)
+        print(assignmentSerializer.data)
+        get_contract_manager_id = assignmentSerializer.data['contract_manager']
+        get_customer_id = assignmentSerializer.data["customer"]
+        get_employee_id = assignmentSerializer.data["employee"]
+
+        contract_manager_list = []
+        customer_list = []
+        employee_list = []
+
+        try:
+            for i in get_contract_manager_id:
+                user = Manager.objects.get(id=i)
+                manager_name = user.user.FullName  #In the Manager has user => FullName feilds
+
+                contract_manager_list.append(manager_name)
+
+            for i in get_employee_id:
+                employee = Employee.objects.get(id=i)
+                employee_name = employee.user.FullName
+
+                employee_list.append(employee_name)
+
+            for i in get_customer_id:
+                customer = Customer.objects.get(id=i)
+                customer_name = customer.CustomerName
+                customer_list.append(customer_name)
+
+            
+        except Manager.DoesNotExist:
+            return Response({"message": "User ID is not valid"}, status=status.HTTP_400_BAD_REQUEST)
+      
+        return Response({"message": "Get data complete...", "contract_manager": contract_manager_list, "employee": employee_list, "customer": customer_list}, status=status.HTTP_200_OK)
+    
