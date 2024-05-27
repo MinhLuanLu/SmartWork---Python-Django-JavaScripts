@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
     get_user_info();
     get_CheckIn_info();
+
+    const role = sessionStorage.getItem('user_role');
+    if(role == 'Manager'){
+        document.getElementById('checkin-history').style.display = 'none';
+        document.getElementById('checkIn_nav').style.display = 'none';
+        document.getElementById('request').style.display = 'inline-block';
+    }
 });
 
 document.getElementById('logout').addEventListener('click', function () {
@@ -87,7 +94,7 @@ function search_data(){
 
 function get_user_info() {
     const get_email = sessionStorage.getItem('Email');
-    const object_get_email = { 'Email': get_email };
+    const object_get_email = { 'Email': get_email};
 
     fetch('http://127.0.0.1:8000/User_info_api/', {
         method: 'POST',

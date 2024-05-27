@@ -11,11 +11,6 @@ from django.shortcuts import get_object_or_404
 
 
 
-
-
-
-
-
 def home(request):
     return HttpResponse('HOME PAGE')
 
@@ -52,7 +47,7 @@ def login(request):
     if request.method == "POST":
         Email = request.data.get('Email')
         Password = request.data.get('Password')
-        
+
         user = User.objects.filter(Email=Email).first() # user first because the email is unique
         if user is None:
             raise AuthenticationFailed('User not found!')
@@ -127,20 +122,21 @@ def Assignment_api(request):
         check_email_employee = Assignment.objects.filter(employee__user__Email = email) 
         search_data = data.capitalize() # maake the first letter is capitalized
 
-
-        
-        if  not check_email_employee:
+        check_email_manager = Assignment.objects.filter(contract_manager__user__Email = email)
+       
+      
+        if  not check_email_employee and not check_email_manager:
             return Response({"message": " Email is not vailid"}, status=status.HTTP_400_BAD_REQUEST) #### Need to change
         try:
             check_customer_name = Assignment.objects.get(customer__CustomerName=search_data)
         except Assignment.DoesNotExist:
-            return Response({"message": "Search data is not valid"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Your Workplace is not exist in the system ! Try again."}, status=status.HTTP_400_BAD_REQUEST)
         
         ## send error massage to frontend if check email and check data search not exist
-        print(f"{email}: Searching for: {search_data}")
+        print(f"{email} Searching for: {search_data}")
         
         assignmentSerializer = AssignmentSerializer(check_customer_name)
-        print(assignmentSerializer.data)
+        print(f"Result: {assignmentSerializer.data}")
         get_contract_manager_id = assignmentSerializer.data['contract_manager']
         get_customer_id = assignmentSerializer.data["customer"]
         get_employee_id = assignmentSerializer.data["employee"]

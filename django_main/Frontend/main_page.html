@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main_page.css">
     <script src="JavaScript/main_page.js" defer></script>
-    
-   
     <title>CheckIn Live Button</title>
-
+    
 </head>
 <body>
     <header>
@@ -16,10 +14,12 @@
     </header>
     <nav>
         <a href="profile.html">Profile</a>
-        <a href="product.html">Order</a>
+        <a id="order" style="display: inline-block;" href="product.html">Order</a>
+        <a id="decline" style="display: none;" href="">Decline</a>
         <a href="chat.html">Chat</a>
         <a id="checkin_nav" style="display: inline-block;" href="checkIn.html">Check-in</a>
-        <a id="confirm" style="display: none;" href="">Confirm</a>
+        <a id="request" style="display: none;" href="request.html">Request</a>
+        <a id="status" style="display: inline-block;" href="">Status</a>
         <a type="button" id="logout" href="home.html">Logout</a>
     </nav>
     <div id="fullname"></div>
@@ -30,6 +30,13 @@
             <p id="checkIn_text" style="display: block;">Check-In</p>
             <div class="live_time" id="liveTime"></div>
         </button>
+    </div>
+
+    <div id="description">
+        <h2>About SmartWork</h2>
+        <p>
+            Welcome to SmartWork, your all-in-one platform for efficient task management, seamless communication, and streamlined workflow. Our tools are designed to enhance productivity and ensure that your workday is as smooth and organized as possible. Whether you're checking in for the day, managing your orders, or engaging with colleagues through our chat system, SmartWork provides a user-friendly experience tailored to meet your professional needs.
+        </p>
     </div>
 </body>
 </html>

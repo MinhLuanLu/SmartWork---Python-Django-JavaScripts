@@ -79,3 +79,13 @@ nav a {
     color: rgb(233, 41, 41);
     
 }
+
+#description {
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    margin-top: 310px;
+}

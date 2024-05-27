@@ -7,7 +7,7 @@ body {
 
 
 .navbar {
-  background-color: #333;
+  background-color: #077b2a;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -53,14 +53,14 @@ button {
     font-size: 18px;
     font-weight: bold;
     color: #fff;
-    background-color: #077b2a; /* Google Maps blue */
+    background-color: #4CAF50; /* Google Maps blue */
     border: none;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 button:hover {
-    background-color: #077b2a; /* Google Maps darker blue */
+    background-color: #4CAF50; /* Google Maps darker blue */
 }
 p {
     margin: 10px 0;
@@ -71,22 +71,3 @@ span {
     color: #077b2a; 
 }
 
-.notification {
-    background-color: rgb(216, 211, 211);
-    color: #077b2a;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    display: none;
-    margin-top: 50px;
-    font-weight: bold;
-    opacity: 0.8;
-}
-.show {
-    display: block;
-}

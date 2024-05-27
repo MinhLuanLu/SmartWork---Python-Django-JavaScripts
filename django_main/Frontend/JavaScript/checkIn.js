@@ -8,13 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
 });
 
-function showNotification() {
-    var notification = document.getElementById("notification");
-    notification.classList.add("show");
-    setTimeout(function(){
-        notification.classList.remove("show");
-    }, 2000); // Hide after 3 seconds
-}
+
 
 function get_location(lat, long) {
     const location_api = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${long}&localityLanguage=en`;
@@ -68,8 +62,7 @@ function fetch_dataform_to_api(){
         if (response.ok){
             return response.json().then(data =>{
                 if (data.message){
-                    console.log(data.message);
-                    showNotification();  
+                    console.log(data.message); 
                     window.location.href = 'main_page.html'; 
                     
                 }
