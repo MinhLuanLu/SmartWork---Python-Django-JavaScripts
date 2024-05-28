@@ -117,15 +117,15 @@ body {
     font-size: 15px;
     font-weight: bold;
     color: #fff;
-    background-color: #4CAF50; /* Google Maps blue */
+    background-color: #af2424; 
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: opacity 0.5s ;
 }
 #cancel-btn:hover {
-    background-color: #4CAF50; /* Google Maps darker blue */
-}
+    opacity: 0.8;
+} 
 
 
 .navbar {

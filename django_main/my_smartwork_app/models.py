@@ -73,3 +73,5 @@ class CheckIn(models.Model):
 
     def __str__(self):
         return f"{self.employee.user.FullName} - CheckIn at [ {str(self.CheckIn_time)} - {self.Location}]"
+    
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Page</title>
+    <link rel="stylesheet" href="css/checkout.css">
+    <script src="JavaScript/checkout.js" defer></script>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">SmartWork</div>
+            <ul class="nav-links">
+                <li><a href="main_page.html">Home</a></li>
+                <li><a href="product.html">Order</a></li>
+                <li><a href="checkIn.html">Check-In</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a type="button" id="logout" href="home.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="checkout-container">
+        <h1 id="checkout_text">Checkout</h1>
+        <form>
+            <div class="section">
+                <h2 id="order_infomation_text">Your Order:</h2>
+                <p id="order_object"></p>
+            </div>
+
+            <div class="section">
+                <h2>Search for your workplace...</h2>
+                <input type="text" id="search" placeholder="Your Workplace..." required>
+                <button type="button" id="search_btn">Search</button>
+                <h3 id="send_to_manager_text" style="display: none;">Your Order will send to manager:</h3>
+                <p id="manager"></p>
+            </div>
+
+            <button type="button" id="place_order">Place Order</button>
+        </form>
+    </div>
+</body>
+
+</html>

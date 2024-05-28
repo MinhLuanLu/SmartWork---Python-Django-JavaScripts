@@ -1,5 +1,8 @@
     
-    
+    const get_fullname = sessionStorage.getItem('FullName');
+    if (get_fullname == null){
+        window.location.href = 'login.html';
+    }
     let items_in_cart_total = 0; //add total items in cart
 
     let sort_sække_total_items_list = 0;
@@ -43,7 +46,7 @@
           
         }
         else{
-            alert('Please choose items total')
+            alert('Please choose the amount of items ');
         }
         
       
@@ -62,11 +65,11 @@
       
             spandepose_total = get_spandepose_total;
             document.getElementById('items_in_cart').innerText = total;
-            document.getElementById('sort_sække_total').value = '0';
+            document.getElementById('spandepose_total').value = '0';
             
         }
         else{
-            alert('Please choose items total')
+            alert('Please choose the amount of items ');
         }
         
     })
@@ -85,7 +88,7 @@
             document.getElementById('toiletpapir_tork_total').value = '0';
         }
         else{
-            alert('Please choose items total')
+            alert('Please choose the amount of items ');
         }
         
     })
@@ -108,7 +111,7 @@
             document.getElementById('toiletpapir_total').value = '0';
         }
         else{
-            alert('Please choose items total')
+            alert('Please choose the amount of items ');
         }
         
     })
@@ -128,7 +131,7 @@
             document.getElementById('handsker_total').value = '0';
         }
         else{
-            alert('Please choose items total')
+            alert('Please choose the amount of items ');
         }
         
     })
@@ -148,7 +151,7 @@
             document.getElementById('blå_klud_total').value = '0';
         }
         else{
-            alert('Please choose items total')
+            alert('Please choose the amount of items ');
         }
         
     })
@@ -167,7 +170,7 @@
             document.getElementById('blå_klud_total').value = '0';
         }
         else{
-            alert('Please choose items total')
+            alert('Please choose the amount of items ');
         }
         
     })
@@ -187,7 +190,7 @@
             document.getElementById('frjebakke/kost_total').value = '0';
         }
         else{
-            alert('Please choose items total')
+            alert('Please choose the amount of items ');
         }
         
     })
@@ -209,16 +212,22 @@
             {name: 'Rød Klud', count: rød_klud_item_list},
             {name: 'Frjebakke Kost', count: frjebakke_kost_items_list},
         ];
-        
+        order_object = [];
         order_list.forEach(item => {
             if (item.count > 0) {
                 let paragraph = document.createElement('p'); // create the new element
                 paragraph.innerText = `${item.name}: ${item.count}`;
                 order_info.appendChild(paragraph);
                 
+                order_object.push(`${item.name}: ${item.count} `);
+                let convert_order_object_json = JSON.stringify(order_object);
+                
+                sessionStorage.setItem('order_list', convert_order_object_json);
+
                 document.getElementById("confirm_order").style.display = 'inline-block';
+
                 
-                
+   
             }
         });
         
@@ -233,6 +242,7 @@
     })
 
     document.getElementById('confirm-btn').addEventListener('click',function(){
-        alert('order Confirm');
         document.getElementById("confirm_order").style.display = 'none';
+        document.getElementById('items_in_cart').style.display = 'none';
+        window.location.href = 'checkout.html';
     })

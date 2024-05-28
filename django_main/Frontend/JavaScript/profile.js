@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    const get_fullname = sessionStorage.getItem('FullName');
+
+    if (get_fullname == null){
+        window.location.href = 'login.html';
+    }
+
     get_user_info();
     get_CheckIn_info();
 
@@ -8,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('checkIn_nav').style.display = 'none';
         document.getElementById('request').style.display = 'inline-block';
     }
+
 });
 
 document.getElementById('logout').addEventListener('click', function () {

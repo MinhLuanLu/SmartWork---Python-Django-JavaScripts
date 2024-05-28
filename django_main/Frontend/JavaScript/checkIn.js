@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (fullname) {
         document.getElementById('FullName').textContent = fullname;
     }
+    if (fullname == null){
+        window.location.href = 'login.html';
+    }
 
     
 });
