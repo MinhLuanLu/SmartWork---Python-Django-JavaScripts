@@ -11,7 +11,9 @@
 
     const order_object = document.getElementById('order_object');
     
-    convert_orderlist_to_object = JSON.parse(get_order_list); //type Object
+    const convert_orderlist_to_object = JSON.parse(get_order_list); //type Object
+
+    const order_items = JSON.stringify(convert_orderlist_to_object);
 
     for(items in convert_orderlist_to_object){
         let paragraph = document.createElement('li'); 
@@ -34,17 +36,30 @@
 
         else{
 
-            order_data = [{
-                'Receiver': get_manager_list,
+            const datetime = new Date();
+            const date = datetime.getDate();
+            const month = datetime.getMonth() + 1; // Months are zero-based
+            const year = datetime.getFullYear();
+            const hours = datetime.getHours();
+            const minutes = datetime.getMinutes();
+            const seconds = datetime.getSeconds();
+            const order_time = `${hours}:${minutes}:${seconds} ${date}/${month}/${year}`;
+
+            order_data = {
                 'Sender': get_fullname,
+                'Receiver': get_manager_list,
                 'Workplace': get_customer,
-                'Order_items': convert_order_object
-            }]
-            alert('Your Order has been sendt');
+                'Order_items': order_items,
+                'Order_time': order_time,
+                'Order_status': 'Waiting'
+            }
+
+            send_order(order_data);
+
             sessionStorage.removeItem('employee_list');
             sessionStorage.removeItem('Manager');
             sessionStorage.removeItem('order_object');
-            window.location.href = 'product.html';
+            
         }
         
             
@@ -114,3 +129,35 @@
     document.getElementById('logout').addEventListener('click',function(){
         sessionStorage.clear();
     })
+
+    function send_order(order){
+
+        fetch('http://127.0.0.1:8000/Order_api/',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(order)
+        })
+        .then(res =>{
+            if(res.ok){
+                window.location.href = 'product.html';
+                return res.json()
+            }
+            if(res.status === 400){
+                return response.json().then(data =>{
+                    if(data.message){
+                        alert(data.message);
+                    }
+                })
+            }
+        })
+        .then(data=>{
+            if(data.message){
+                alert(data.message);
+            }
+        })
+        .catch(error =>{
+            alert('Error please try again later!!');
+        })
+    }

@@ -9,16 +9,14 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <h1 class="logo">Chat</h1>
-            <ul class="nav-links"> 
-                <!--Remove the checkIn and add the confirm when role is Manager-->
-
-                <li><a href="main_page.html">Home</a></li>
-                <li><a href="product.html">Order</a></li>
-                <li><a href="checkIn.html">Check-In</a></li>
-                <a id="request" style="display: none;" href="confirm.html">Request</a>
-                <li><a href="home.html">Logout</a></li>
-            </ul>
+            <a href="main_page.html">Home</a>
+            <a id="order" style="display: inline-block;" href="product.html">Order</a>
+            <a id="decline" style="display: none;" href="decline.html">Decline</a>
+            <a href="profile.html">Profile</a>
+            <a id="request" style="display: none;" href="chat.html">Request</a>
+            <a id="checkIn" style="display: inline-block;" href="checkIn.html">Check-In</a>
+            <a id="status" style="display: inline-block;" href="status.html">Status</a>
+            <a id="logout" type="button" href="home.html">Logout</a>
         </div>
     </nav>
     <div class="chat-container">
@@ -42,4 +40,21 @@
         </div>
     </div>
 </body>
+<script>
+    const get_role = sessionStorage.getItem('user_role');
+    const get_fullname = sessionStorage.getItem('FullName');
+
+    if(get_fullname == null){
+        window.location.href = 'login.html';
+    }
+    if(get_role == 'Manager'){
+        document.getElementById('order').style.display = 'none';
+        document.getElementById('decline').style.display = 'inline-block';
+        document.getElementById('request').style.display = 'inline-block';
+        document.getElementById('checkIn').style.display = 'none';
+        document.getElementById('status').style.display = 'none';
+
+
+    }
+</script>
 </html>

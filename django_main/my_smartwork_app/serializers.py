@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,CheckIn,Employee,Assignment
+from .models import User,CheckIn,Employee,Assignment, Order
 from django.contrib.auth.hashers import make_password
 
 
@@ -22,7 +22,7 @@ class CheckInSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CheckIn
-        fields = ['FullName', 'Location', 'Latitude', 'Longitude','CheckIn_time']
+        fields = ["id", 'FullName', 'Location', 'Latitude', 'Longitude','CheckIn_time']
 
         """
         The user__username=value is used because the Employee model has a OneToOneField relationship with the User model, 
@@ -50,16 +50,23 @@ class CheckInSerializer(serializers.ModelSerializer):
 class ProfileSerialize(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['Email', 'Address', 'City','Postcode', 'Role']
+        fields = ["id", 'Email', 'Address', 'City','Postcode', 'Role']
 
 
 class CheckIn_infoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckIn
-        fields = ["Location", "Latitude", "Longitude", "CheckIn_time"]
+        fields = ["id", "Location", "Latitude", "Longitude", "CheckIn_time"]
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
-        fields = ["customer", "contract_manager", 'employee', "Activate"]
+        fields = ["id", "customer", "contract_manager", 'employee', "Activate"]
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ["id", "Sender", "Receiver", "Receiver", "Workplace","Order_items", "Order_time", "Order_status"]
+

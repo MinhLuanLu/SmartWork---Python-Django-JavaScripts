@@ -34,41 +34,21 @@ body {
     max-width: 100%;
     margin: 20px auto;
 }
-#approve-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
-}
-#approve-button:hover {
-    background-color: #45a049;
-}
-
-#decline_button {
-    background-color: #b31818;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: opacity 0.3s;
-}
-#decline_button:hover {
-    opacity: 0.8;
-}
 
 #order_container{
     margin: 10px;
     padding: 50px;
     transition: font-size 0.5s;
+    color: white;
 }
 
 #order_container:hover{
     cursor: pointer;
     font-size: 15px;
+}
+
+button{
+    background-color:#333 ;
+    opacity: 0.8;
+    border: none;
 }

@@ -2,12 +2,13 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from .models import User, Employee, Manager,CheckIn,Assignment,Customer
-from .serializers import UserSerializer, CheckInSerializer, ProfileSerialize, CheckIn_infoSerializer, AssignmentSerializer
+from .models import User, Employee, Manager,CheckIn,Assignment,Customer,Order
+from .serializers import UserSerializer, CheckInSerializer, ProfileSerialize, CheckIn_infoSerializer, AssignmentSerializer,OrderSerializer
 
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.hashers import check_password
-from django.shortcuts import get_object_or_404
+
+from django.core.exceptions import MultipleObjectsReturned
 
 
 
@@ -169,3 +170,154 @@ def Assignment_api(request):
       
         return Response({"message": "Get data complete...", "contract_manager": contract_manager_list, "employee": employee_list, "customer": customer_list}, status=status.HTTP_200_OK)
     
+@api_view(["GET", "POST"])
+def Order_api(request):
+    if request.method == "GET":
+        order = Order.objects.all()
+        orderserializer = OrderSerializer(order, many=True)
+        return Response(orderserializer.data)
+    
+    if request.method == "POST":
+        sender = request.data.get('Sender')
+        receiver = request.data.get("Receiver")
+        getworkplace = request.data.get('Workplace')
+        order_items = request.data.get("Order_items")
+
+        manager_name = request.data.get('FullName')
+
+
+        workplace = getworkplace
+        print(f"Sender [{sender}] Ordering from {workplace} to {receiver} [{order_items}]")
+
+        try:
+            check_customer_name = Assignment.objects.get(customer__CustomerName=workplace)
+        except Assignment.DoesNotExist:
+            return Response({"message": "Your Workplace is not exist in the system ! Try again."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        assignmentSerializer = AssignmentSerializer(check_customer_name)
+        
+        get_contract_manager_id = assignmentSerializer.data['contract_manager']
+        get_customer_id = assignmentSerializer.data["customer"]
+        get_employee_id = assignmentSerializer.data["employee"]
+
+        contract_manager_list = []
+        customer_list = []
+        employee_list = []
+
+        try:
+            for i in get_contract_manager_id:
+                user = Manager.objects.get(id=i)
+                manager_name = user.user.FullName  #In the Manager has user => FullName feilds
+
+                contract_manager_list.append(manager_name)
+
+            for i in get_employee_id:
+                employee = Employee.objects.get(id=i)
+                employee_name = employee.user.FullName
+
+                employee_list.append(employee_name)
+
+            for i in get_customer_id:
+                customer = Customer.objects.get(id=i)
+                customer_name = customer.CustomerName
+                customer_list.append(customer_name)
+
+            
+        except Manager.DoesNotExist:
+            return Response({"message": "User ID is not valid"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        for manager in contract_manager_list:
+            if receiver == manager:
+                break
+
+            else:
+                return Response({"message": "Can't send your order"}, status=status.HTTP_400_BAD_REQUEST)
+            
+        orderserializer = OrderSerializer(data=request.data)
+        if orderserializer.is_valid():
+            orderserializer.save()
+            return Response({"message": "Your order has been sent to your Manger."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Error: Can't save your order to system. Please try again."}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+@api_view(["POST", "GET"])
+def Post_order_api(request):
+    if request.method == 'GET':
+        order = Order.objects.all()
+        orderserializer = OrderSerializer(order, many=True)
+        return Response(orderserializer.data)
+    
+    if request.method == 'POST':
+        manager_name = request.data.get('FullName')
+        get_order_status = request.data.get('Status')
+
+        check_receiver_name = Order.objects.filter(Receiver=manager_name)
+        check_order_status = Order.objects.filter(Receiver=manager_name ,Order_status = get_order_status)
+
+        if not check_receiver_name.exists():   
+             return Response({"message": f'Couldnt found the receiver [{manager_name}] in the system, Please try logout and again' }, status=status.HTTP_400_BAD_REQUEST)
+        if not check_order_status:
+            return Response({"message": "No orders are available.."}, status=status.HTTP_400_BAD_REQUEST)
+        orderSerializer = OrderSerializer(check_order_status, many=True)
+        
+        return Response({'message': orderSerializer.data}, status=status.HTTP_200_OK)
+
+@api_view(["POST", "GET"])
+def Approved_order_api(request):
+    if request.method == "GET":
+        order = Order.objects.all()
+        orderSerializer = OrderSerializer(order, many=True)
+        return Response(orderSerializer.data)
+    
+
+
+       
+    if request.method == "POST":
+        sender = request.data.get('Sender')
+        receiver = request.data.get('Receiver')
+        order_time = request.data.get('Order_time')
+        order_status = request.data.get('Order_status')
+        new_status = 'Approved'
+        
+
+        check_order_approved = Order.objects.filter(Sender = sender, Receiver = receiver, Order_time = order_time, Order_status = order_status)
+        if not check_order_approved.exists():
+            return Response({"message": "Error to Approved the order. please try again.."}, status=status.HTTP_400_BAD_REQUEST)
+
+        check_order_approved.update(Order_status=new_status)
+        return Response({"message": "Order status updated successfully"}, status=status.HTTP_200_OK)
+    
+
+@api_view(["POST", "GET"])
+def Decline_order_api(request):
+    if request.method == "GET":
+        order = Order.objects.all()
+        orderSerializer = OrderSerializer(order, many=True)
+        return Response(orderSerializer.data)
+       
+    if request.method == "POST":
+        sender = request.data.get('Sender')
+        receiver = request.data.get('Receiver')
+        order_time = request.data.get('Order_time')
+        order_status = request.data.get('Order_status')
+        new_status = 'Decline'
+        
+
+        check_order_approved = Order.objects.filter(Sender = sender, Receiver = receiver, Order_time = order_time, Order_status = order_status)
+        if not check_order_approved.exists():
+            return Response({"message": "Error to Approved the order. please try again.."}, status=status.HTTP_400_BAD_REQUEST)
+
+        check_order_approved.update(Order_status=new_status)
+        return Response({"message": "Order status updated successfully"}, status=status.HTTP_200_OK)
+        
+        
+
+        
+        
+
+    
+
+        
+        
+        

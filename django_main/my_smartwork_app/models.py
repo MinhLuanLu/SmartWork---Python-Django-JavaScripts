@@ -75,3 +75,14 @@ class CheckIn(models.Model):
         return f"{self.employee.user.FullName} - CheckIn at [ {str(self.CheckIn_time)} - {self.Location}]"
     
 
+class Order(models.Model):
+    Sender = models.CharField(max_length=100)
+    Receiver = models.CharField(max_length=100)
+    Workplace = models.CharField(max_length=100)
+    Order_items = models.CharField(max_length=1000)
+    Order_time = models.CharField(max_length=100)
+    Order_status = models.CharField(max_length=100)
+    Time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Sender [{self.Sender}] Ordering from {self.Workplace} to {self.Receiver} - {self.Time}"

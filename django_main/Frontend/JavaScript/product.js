@@ -157,7 +157,7 @@
     })
     
     document.getElementById('order-btn_rød_klud').addEventListener('click', function(){
-        let get_rød_klud = document.getElementById('blå_klud_total').value;
+        let get_rød_klud = document.getElementById('rød_klud_total').value;
         
         if (get_rød_klud > 0){
             total = items_in_cart_total+1;

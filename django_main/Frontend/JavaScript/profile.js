@@ -1,9 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const get_fullname = sessionStorage.getItem('FullName');
-
+    const get_role = sessionStorage.getItem('user_role');
+   
     if (get_fullname == null){
         window.location.href = 'login.html';
+    }
+    if(get_role == 'Manager'){
+        document.getElementById('order').style.display = 'none';
+        document.getElementById('decline').style.display = 'inline-block';
+        document.getElementById('status').style.display = 'none';
+
     }
 
     get_user_info();
