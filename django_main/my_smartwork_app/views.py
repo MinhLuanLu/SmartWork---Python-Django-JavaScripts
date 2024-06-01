@@ -249,19 +249,28 @@ def Post_order_api(request):
         return Response(orderserializer.data)
     
     if request.method == 'POST':
-        manager_name = request.data.get('FullName')
+        get_fullname = request.data.get('FullName')
         get_order_status = request.data.get('Status')
+       
 
-        check_receiver_name = Order.objects.filter(Receiver=manager_name)
-        check_order_status = Order.objects.filter(Receiver=manager_name ,Order_status = get_order_status)
+        check_receiver_name = Order.objects.filter(Receiver=get_fullname)
+        check_sender_name = Order.objects.filter(Sender=get_fullname)
+        check_order_status_manager = Order.objects.filter(Receiver=get_fullname,Order_status = get_order_status)
+        check_order_status_employee = Order.objects.filter(Sender = get_fullname, Order_status = get_order_status)
 
-        if not check_receiver_name.exists():   
-             return Response({"message": f'Couldnt found the receiver [{manager_name}] in the system, Please try logout and again' }, status=status.HTTP_400_BAD_REQUEST)
-        if not check_order_status:
+        if not check_receiver_name.exists:   
+             return Response({"message": f'Couldnt found the receiver [{get_fullname}] in the system, Please try logout and again' }, status=status.HTTP_400_BAD_REQUEST)
+        if not check_order_status_manager and  not check_order_status_employee:
             return Response({"message": "No orders are available.."}, status=status.HTTP_400_BAD_REQUEST)
-        orderSerializer = OrderSerializer(check_order_status, many=True)
         
-        return Response({'message': orderSerializer.data}, status=status.HTTP_200_OK)
+        if check_order_status_manager:
+            orderSerializer = OrderSerializer(check_order_status_manager, many=True) # Just get all the orders has waiting status
+            return Response({'message': orderSerializer.data}, status=status.HTTP_200_OK)
+        
+        if check_order_status_employee:
+            orderSerializer = OrderSerializer(check_sender_name, many=True) ## Get all the orders that match the Sender name
+            return Response({'message': orderSerializer.data}, status=status.HTTP_200_OK)
+
 
 @api_view(["POST", "GET"])
 def Approved_order_api(request):
@@ -270,9 +279,6 @@ def Approved_order_api(request):
         orderSerializer = OrderSerializer(order, many=True)
         return Response(orderSerializer.data)
     
-
-
-       
     if request.method == "POST":
         sender = request.data.get('Sender')
         receiver = request.data.get('Receiver')
