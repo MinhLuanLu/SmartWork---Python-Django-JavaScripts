@@ -86,3 +86,12 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Sender [{self.Sender}] Ordering from {self.Workplace} to {self.Receiver} - {self.Time}"
+
+class Conversation(models.Model):
+    Sender = models.CharField(max_length=100)
+    Receiver = models.CharField(max_length=100)
+    Message = models.CharField(max_length=100000)
+    Sendingtime = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Sender [{self.Sender}] sent to Receiver [{self.Receiver}] at {self.Sendingtime}"

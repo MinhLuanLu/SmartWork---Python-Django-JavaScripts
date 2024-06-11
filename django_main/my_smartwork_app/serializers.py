@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,CheckIn,Employee,Assignment, Order
+from .models import User,CheckIn,Employee,Assignment, Order, Conversation
 from django.contrib.auth.hashers import make_password
 
 
@@ -68,5 +68,11 @@ class AssignmentSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ["id", "Sender", "Receiver", "Receiver", "Workplace","Order_items", "Order_time", "Order_status"]
+        fields = ["id", "Sender", "Receiver", "Workplace","Order_items", "Order_time", "Order_status"]
+
+    
+class ConversationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Conversation
+        fields = ["id", "Sender", "Receiver","Message", "Sendingtime"]
 

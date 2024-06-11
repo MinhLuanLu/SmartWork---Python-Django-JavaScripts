@@ -1,14 +1,17 @@
 from django.http import HttpResponse, JsonResponse
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from .models import User, Employee, Manager,CheckIn,Assignment,Customer,Order
-from .serializers import UserSerializer, CheckInSerializer, ProfileSerialize, CheckIn_infoSerializer, AssignmentSerializer,OrderSerializer
+from .models import User, Employee, Manager,CheckIn,Assignment,Customer,Order,Conversation
+from .serializers import UserSerializer, CheckInSerializer, ProfileSerialize, CheckIn_infoSerializer, AssignmentSerializer,OrderSerializer, ConversationSerializer
 
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.hashers import check_password
 
-from django.core.exceptions import MultipleObjectsReturned
+
+
+
 
 
 
@@ -43,7 +46,8 @@ def register_api(request):
             return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
         return Response({"message": "Data is not valid", "error": userserializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
+
+@api_view(['POST', 'GET'])
 def login(request):
     if request.method == "POST":
         Email = request.data.get('Email')
@@ -56,11 +60,11 @@ def login(request):
         if not check_password(Password, user.Password):
             raise AuthenticationFailed('Incorrect password!')
         
-   
+        
         return Response({"message": "Login successful", "FullName": user.FullName, "user_role": user.Role}, status=status.HTTP_200_OK)
 
 @api_view(["POST", "GET"])
-def CheckIn_api(request):
+def API_CheckIn(request):
    if request.method == "GET":
        checIn = CheckIn.objects.all()
        checkInSerializer = CheckInSerializer(checIn, many=True)
@@ -74,7 +78,7 @@ def CheckIn_api(request):
         return Response({"massage": "Data is not valid", 'error': "Error from Server"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST", "GET"]) #Do not to save the data to database
-def User_info_api(request):
+def User_info(request):
     if request.method == "GET":
         user_info = User.objects.all()
         profileserializer = ProfileSerialize(user_info, many=True)
@@ -110,7 +114,7 @@ def CheckIn_info_api(request):
     
 
 @api_view(['GET', 'POST'])
-def Assignment_api(request):
+def api_Assignment(request):
     if request.method == "GET":
         assignment = Assignment.objects.all()
         assignmentSerializer = AssignmentSerializer(assignment, many=True)
@@ -121,7 +125,7 @@ def Assignment_api(request):
         data = request.data.get("Search_data")
 
         check_email_employee = Assignment.objects.filter(employee__user__Email = email) 
-        search_data = data.capitalize() # maake the first letter is capitalized
+        search_data = data # maake the first letter is capitalized
 
         check_email_manager = Assignment.objects.filter(contract_manager__user__Email = email)
        
@@ -141,6 +145,7 @@ def Assignment_api(request):
         get_contract_manager_id = assignmentSerializer.data['contract_manager']
         get_customer_id = assignmentSerializer.data["customer"]
         get_employee_id = assignmentSerializer.data["employee"]
+        print(assignmentSerializer.data)
 
         contract_manager_list = []
         customer_list = []
@@ -164,14 +169,42 @@ def Assignment_api(request):
                 customer_name = customer.CustomerName
                 customer_list.append(customer_name)
 
-            
+            info = {"contract_manager": contract_manager_list, "employee": employee_list, "customer": customer_list}
         except Manager.DoesNotExist:
             return Response({"message": "User ID is not valid"}, status=status.HTTP_400_BAD_REQUEST)
       
-        return Response({"message": "Get data complete...", "contract_manager": contract_manager_list, "employee": employee_list, "customer": customer_list}, status=status.HTTP_200_OK)
+        return Response({"message": "Get data complete...","info": info, "contract_manager": contract_manager_list, "customer": customer_list}, status=status.HTTP_200_OK)
+    
+
+@api_view(['GET', 'POST'])
+def api_Workplace(request):
+    if request.method == "GET":
+        order = Assignment.objects.all()
+        orderserializer = AssignmentSerializer(order, many=True)
+        return Response(orderserializer.data)
+    
+    if request.method == "POST":
+        name = request.data.get('FullName')
+        if not name:
+            return Response({'message': "FullName not provided"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if an employee with the given name exists
+        check_name = Assignment.objects.filter(employee__user__FullName=name)
+        if not check_name.exists():
+            return Response({'message': "The Employee name is not in the system"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if there is any customer associated with the employee
+        customers = Customer.objects.filter(assignment__employee__user__FullName=name)
+        if not customers.exists():
+            return Response({'message': "No customers found for the given employee"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Return the customer names
+        customer_names = customers.values_list('CustomerName', flat=True)
+        return Response({"message": "Get Workplace", 'workplaces': list(customer_names)}, status=status.HTTP_200_OK)
+    
     
 @api_view(["GET", "POST"])
-def Order_api(request):
+def api_Order(request):
     if request.method == "GET":
         order = Order.objects.all()
         orderserializer = OrderSerializer(order, many=True)
@@ -242,7 +275,7 @@ def Order_api(request):
         
 
 @api_view(["POST", "GET"])
-def Post_order_api(request):
+def api_Requestments(request):
     if request.method == 'GET':
         order = Order.objects.all()
         orderserializer = OrderSerializer(order, many=True)
@@ -285,6 +318,7 @@ def Approved_order_api(request):
         order_time = request.data.get('Order_time')
         order_status = request.data.get('Order_status')
         new_status = 'Approved'
+       
         
 
         check_order_approved = Order.objects.filter(Sender = sender, Receiver = receiver, Order_time = order_time, Order_status = order_status)
@@ -292,6 +326,7 @@ def Approved_order_api(request):
             return Response({"message": "Error to Approved the order. please try again.."}, status=status.HTTP_400_BAD_REQUEST)
 
         check_order_approved.update(Order_status=new_status)
+        
         return Response({"message": "Order status updated successfully"}, status=status.HTTP_200_OK)
     
 
@@ -317,7 +352,46 @@ def Decline_order_api(request):
         check_order_approved.update(Order_status=new_status)
         return Response({"message": "Order status updated successfully"}, status=status.HTTP_200_OK)
         
+@api_view(['POST', 'GET'])
+def api_Conversation(request):
+    if request.method == "GET":
+        conversation = Conversation.objects.all()
+        conversationSerializer = ConversationSerializer(conversation, many=True)
+        return Response (conversationSerializer.data)
+
+    if request.method == "POST":
+        message = ConversationSerializer(data=request.data)
+      
+        Sender = request.data.get('Sender')
+        Receiver = request.data.get('Receiver')
         
+        check_sender = Conversation.objects.filter(Sender=Sender, Receiver=Receiver)
+        
+        print(Receiver)
+        serializer = ConversationSerializer(check_sender, many=True)
+        if message.is_valid():
+            message.save()
+        
+        return Response({"message": "Your message has been sent...", "conversation": serializer.data}, status=status.HTTP_200_OK)
+    
+
+@api_view(['POST', 'GET'])
+def api_Get_conversation(request):
+    if request.method == "GET":
+        conversation = Conversation.objects.all()
+        conversationSerializer = ConversationSerializer(conversation, many=True)
+        return Response (conversationSerializer.data)
+
+    if request.method == "POST":
+        Sender = request.data.get('Sender')
+        Receiver = request.data.get('Receiver')
+        
+        check_sender = Conversation.objects.filter(Sender=Receiver, Receiver=Sender)
+        
+        print(Receiver)
+        serializer = ConversationSerializer(check_sender, many=True)
+        
+        return Response({"message": "Your message has been sent...", "conversation": serializer.data}, status=status.HTTP_200_OK)
 
         
         
