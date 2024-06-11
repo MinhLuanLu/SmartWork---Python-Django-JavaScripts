@@ -1,4 +1,5 @@
 from django.http import HttpResponse, JsonResponse
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -8,7 +9,9 @@ from .serializers import UserSerializer, CheckInSerializer, ProfileSerialize, Ch
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.hashers import check_password
 
-from django.core.exceptions import MultipleObjectsReturned
+
+
+
 
 
 
@@ -43,7 +46,8 @@ def register_api(request):
             return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
         return Response({"message": "Data is not valid", "error": userserializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
+
+@api_view(['POST', 'GET'])
 def login(request):
     if request.method == "POST":
         Email = request.data.get('Email')
@@ -56,7 +60,7 @@ def login(request):
         if not check_password(Password, user.Password):
             raise AuthenticationFailed('Incorrect password!')
         
-   
+        
         return Response({"message": "Login successful", "FullName": user.FullName, "user_role": user.Role}, status=status.HTTP_200_OK)
 
 @api_view(["POST", "GET"])

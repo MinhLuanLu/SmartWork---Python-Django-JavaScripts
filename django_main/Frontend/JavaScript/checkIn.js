@@ -10,7 +10,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
 });
-
+async function getAddress(lat, lng) {
+   
+    await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC8eCx3JUetYjgfE6f8535dfCCtGb9oZdo`,{
+        
+    })
+    .then(res => {
+        if (res.ok){
+            return res.json();
+        }
+    })
+    .then(data =>{
+        console.log(data['results'][0]['formatted_address']);
+    })
+        
+  }
 
 
 function get_location(lat, long) {
@@ -24,6 +38,7 @@ function get_location(lat, long) {
                 document.getElementById("your_location").textContent = `${data.city}/${data.countryName}`;
                 let Location = `${data.city}/${data.countryName}`;
                 sessionStorage.setItem('Location', Location);
+                console.log(data);
 
                 
             }
@@ -122,6 +137,7 @@ document.getElementById('checkin').addEventListener('click', event => {
             document.getElementById('checkIn_time').textContent = checkIn_time;
 
             get_location(latitude,longitude)
+            getAddress(latitude,longitude);
             
             
 
